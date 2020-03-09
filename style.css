@@ -26,6 +26,8 @@ a{
 }
 #lista{
     margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 .tit{
     float: left;
@@ -37,3 +39,12 @@ ul{
 .selected{
     background-color: lightgreen;
 }
+td{
+    font-size: 55px;
+}
+table {
+    border-collapse: collapse;
+  }
+table, th, td {
+    border: 1px solid black;
+  }

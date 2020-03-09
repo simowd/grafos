@@ -56,7 +56,46 @@ $("#move").click(function() {
     $("#rename").removeClass();
 });
 $("#matrix").click(function() {
-    //Some code
+    var longitud = nodes.length;
+    var matrix = [];
+    var filcol = [""]
+    for(var i = 0;i < nodes.length;i++){
+        filcol.push(nodes[i].nom);
+    }
+    matrix.push(filcol);
+    for (var i = 0; i < longitud; i++) {
+        var fila = [];
+        for (var j = 0; j < longitud + 1; j++) {
+            if(j === 0){
+                fila.push(nodes[i].nom);
+            }
+            else{
+                fila.push("0");
+            }
+        }
+        matrix.push(fila);
+    }
+
+    for (var i = 0; i < arrows.length; i++) {
+        var ini = arrows[i].init;
+        var fin = arrows[i].end;
+        console.log(arrows[i].end == matrix[0][2]);
+        var lon = nodes.length;
+        for(var j = 1; j < lon+1;j++){
+            if(matrix[0][j] == fin){
+                for(var k = 1; k < lon+1;k++){
+                    if(matrix[k][0] == ini){
+                        
+                        matrix[k][j] = arrows[i].attr;
+                    }
+                }
+            }
+        }
+    }
+    $('#metaConfigTable').empty();
+    $('#metaConfigTable').append(
+        tabelajzing(matrix)
+    );
 });
 
 //Main Function
@@ -65,7 +104,6 @@ function onMouseUp(event) {
     if (collides(myCircle) === false) {
         if (currentTool === "add") {
             crearNodo(event, myCircle);
-            
         }
     } else {
         if (currentTool === "delete") {
@@ -73,6 +111,7 @@ function onMouseUp(event) {
         }
     }
     console.log(nodes);
+    console.log(arrows);
 }
 
 //deleteNodo
@@ -109,32 +148,38 @@ function crearNodo(event, myCircle) {
         }
     };
 
-    myCircle.onDoubleClick = function(event){
-        if(currentTool === "add"){
-            if(mod1 < 0 && mod2 < 0){
+    myCircle.onDoubleClick = function(event) {
+        if (currentTool === "add") {
+            if (mod1 < 0 && mod2 < 0) {
                 mod1 = getNodo(event.point);
                 nodes[mod1].circle.fillColor = "green";
-            }
-            else if (mod1 >= 0 && mod2 < 0){
+            } else if (mod1 >= 0 && mod2 < 0) {
                 mod2 = getNodo(event.point);
-                generarFlecha(mod1,mod2);
+                generarFlecha(mod1, mod2);
                 nodes[mod1].circle.fillColor = "red";
                 mod1 = -1;
                 mod2 = -1;
             }
         }
-    }
+    };
     //create Object
     nodeObj = new nodo(texto, textIt, myCircle);
     nodes.push(nodeObj);
 }
 
 //Generate Arrow
-function generarFlecha(mod1,mod2){
+function generarFlecha(mod1, mod2) {
     var puntoIni = nodes[mod1].circle.position;
     var puntoFini = nodes[mod2].circle.position;
-    a = drawArrow(puntoIni,puntoFini);
-    var arrow = new flecha(a[3],a[2],a[0],a[1],nodes[mod1].nom,nodes[mod2].nom);
+    a = drawArrow(puntoIni, puntoFini);
+    var arrow = new flecha(
+        a[3],
+        a[2],
+        a[0],
+        a[1],
+        nodes[mod1].nom,
+        nodes[mod2].nom
+    );
     arrows.push(arrow);
 }
 
@@ -189,13 +234,13 @@ function getNodo(point) {
 //arrow code
 
 function drawArrow(begin, end) {
-    if(begin == end){
-        end = end + new Size(50,50);
+    if (begin == end) {
+        end = end + new Size(50, 50);
     }
     var pathL = new Path.Line(begin, end);
     var offset = (5 / 10) * pathL.length;
     var point = pathL.getPointAt(offset);
-    var mult = 125*pos;
+    var mult = 125 * pos;
     var normal = pathL.getNormalAt(offset) * 125;
     pos = pos * -1;
     var middlePoin = point + normal;
@@ -223,7 +268,7 @@ function drawArrow(begin, end) {
 
     //generar atributo
     var attr = prompt("Ingrese el valor atributo:");
-    var text = new PointText(point+(normal*1.2));
+    var text = new PointText(point + normal * 1.2);
     text.justification = "center";
     text.fillColor = colorcito;
     text.fontSize = 25;
@@ -238,7 +283,7 @@ function drawArrow(begin, end) {
         }
     };
 
-    var paths = [path,path2,text,attr];
+    var paths = [path, path2, text, attr];
     return paths;
 }
 
@@ -247,10 +292,24 @@ function puntoMedio(pos1, pos2) {
     return new Point((pos1.x + pos2.x + 100) / 2, (pos1.y + pos2.y) / 2);
 }
 
-function getFlecha(point){
+function getFlecha(point) {
     for (var i = 0; i < arrows.length; i++) {
         if (arrows[i].text.contains(point)) {
             return i;
         }
     }
+}
+
+function tabelajzing(a) {
+    // takes (key, value) pairs from and array and returns
+    // corresponding html, i.e. [ [1,2], [3,4], [5,6] ]
+    return [
+        "<tr>\n<td>",
+        a
+            .map(function(e, i) {
+                return e.join("</td>\n<td>");
+            })
+            .join("</td></tr>\n<tr>\n<td>"),
+        "</td>\n</tr>\n"
+    ].join("");
 }

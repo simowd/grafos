@@ -1,28 +1,46 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="style.css" />
-    <link href="https://fonts.googleapis.com/css?family=Sen&display=swap" rel="stylesheet">
-    <script src="js/jquery-3.4.1.js"></script>
-    <!-- Load the Paper.js library -->
-    <script type="text/javascript" src="js/paper-full.js"></script>
-    <!-- Load external PaperScript and associate it with myCanvas -->
-    <script
-      type="text/paperscript"
-      src="js/newScript.js"
-      canvas="myCanvas"
-    ></script>
-  </head>
-  <body>
-    <div id = "tit">
-      <ul class="lista">
-        <li id="item"><a href="#" id="add" class="selected">Añadir</a></li>
-        <li id="item"><a href="#" id="delete">Eliminar</a></li>
-        <li id="item"><a href="#" id="move">Mover</a></li>
-        <li id="item"><a href="#" id="rename">Rename</a></li>
-        <li id="item"><a href="#" id="matrix">Matriz</a></li>
-      </ul>
-    </div>
-    <canvas id="myCanvas" resize></canvas>
-  </body>
+    <head>
+        <link rel="stylesheet" href="style.css" />
+        <link
+            href="https://fonts.googleapis.com/css?family=Sen&display=swap"
+            rel="stylesheet"
+        />
+         <script src="js/jquery-3.4.1.js"></script>
+        <!-- jQuery Modal -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"
+        />
+       
+        <!-- Load the Paper.js library -->
+        <script type="text/javascript" src="js/paper-full.js"></script>
+        <!-- Load external PaperScript and associate it with myCanvas -->
+        <script
+            type="text/paperscript"
+            src="js/newScript.js"
+            canvas="myCanvas"
+        ></script>
+    </head>
+    <body>
+      <div id="ex1" class="modal">
+        <p style="font-size: 30px;">Matriz de adyacencia</p>
+        <table id="metaConfigTable">        
+        </table>
+        
+      </div>
+        <div id="tit">
+            <ul class="lista">
+                <li id="item">
+                    <a href="#" id="add" class="selected">Añadir</a>
+                </li>
+                <li id="item"><a href="#" id="delete">Eliminar</a></li>
+                <li id="item"><a href="#" id="move">Mover</a></li>
+                <li id="item"><a href="#" id="rename">Rename</a></li>
+                <li id="item"><a href="#ex1" id="matrix" rel="modal:open">Matriz</a></li>
+            </ul>
+        </div>
+        <canvas id="myCanvas" resize></canvas>
+    </body>
 </html>
