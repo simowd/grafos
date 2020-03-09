@@ -58,18 +58,17 @@ $("#move").click(function() {
 $("#matrix").click(function() {
     var longitud = nodes.length;
     var matrix = [];
-    var filcol = [""]
-    for(var i = 0;i < nodes.length;i++){
+    var filcol = [""];
+    for (var i = 0; i < nodes.length; i++) {
         filcol.push(nodes[i].nom);
     }
     matrix.push(filcol);
     for (var i = 0; i < longitud; i++) {
         var fila = [];
         for (var j = 0; j < longitud + 1; j++) {
-            if(j === 0){
+            if (j === 0) {
                 fila.push(nodes[i].nom);
-            }
-            else{
+            } else {
                 fila.push("0");
             }
         }
@@ -81,21 +80,18 @@ $("#matrix").click(function() {
         var fin = arrows[i].end;
         console.log(arrows[i].end == matrix[0][2]);
         var lon = nodes.length;
-        for(var j = 1; j < lon+1;j++){
-            if(matrix[0][j] == fin){
-                for(var k = 1; k < lon+1;k++){
-                    if(matrix[k][0] == ini){
-                        
+        for (var j = 1; j < lon + 1; j++) {
+            if (matrix[0][j] == fin) {
+                for (var k = 1; k < lon + 1; k++) {
+                    if (matrix[k][0] == ini) {
                         matrix[k][j] = arrows[i].attr;
                     }
                 }
             }
         }
     }
-    $('#metaConfigTable').empty();
-    $('#metaConfigTable').append(
-        tabelajzing(matrix)
-    );
+    $("#metaConfigTable").empty();
+    $("#metaConfigTable").append(tabelajzing(matrix));
 });
 
 //Main Function
@@ -118,9 +114,38 @@ function onMouseUp(event) {
 function deleteNode(event) {
     var del = isContained(event.point);
     var pos = nodes.indexOf(del);
+    var elim = arrowsContained(pos);
+    for (var i = 0; i < elim.length; i++) {
+        var pos1 = arrows.indexOf(elim[i]);
+        arrows[pos1].path.remove();
+        arrows[pos1].path2.remove();
+        arrows[pos1].text.remove();
+        arrows.splice(pos1, 1);
+    }
     del.circle.remove();
     del.text.remove();
     nodes.splice(pos, 1);
+}
+
+function arrowsContained(pos) {
+    var arrow = [];
+    for (var i = 0; i < arrows.length; i++) {
+        if (
+            nodes[pos].nom === arrows[i].init ||
+            nodes[pos].nom === arrows[i].end
+        ) {
+            arrow.push(arrows[i]);
+        }
+    }
+    return arrow;
+}
+
+function deleteArrow(event) {
+    var pos = isContainedArrow(event.point);
+    arrows[pos].path.remove();
+    arrows[pos].path2.remove();
+    arrows[pos].text.remove();
+    arrows.splice(pos, 1);
 }
 
 //addNodo
@@ -144,7 +169,9 @@ function crearNodo(event, myCircle) {
             var newText = prompt("Ingrese el nuevo nombre");
             textIt.content = newText;
             var pos = getNodo(event.point);
+            var oldText = nodes[pos].nom;
             nodes[pos].nom = newText;
+            reorganizeArrows(newText, oldText);
         }
     };
 
@@ -165,6 +192,16 @@ function crearNodo(event, myCircle) {
     //create Object
     nodeObj = new nodo(texto, textIt, myCircle);
     nodes.push(nodeObj);
+}
+
+function reorganizeArrows(text, oldText) {
+    for (var i = 0; i < arrows.length; i++) {
+        if (arrows[i].init == oldText) {
+            arrows[i].init = text;
+        } else if (arrows[i].end == oldText) {
+            arrows[i].end = text;
+        }
+    }
 }
 
 //Generate Arrow
@@ -223,6 +260,19 @@ function isContained(point) {
     }
 }
 
+function isContainedArrow(point) {
+    var arrowDel = [];
+    for (var i = 0; i < arrows.length; i++) {
+        var arrowP = arrows[i].path;
+        var text = arrows[i].text;
+        var isContain = arrowP.contains(point);
+        var isContainText = text.contains(point);
+        if (isContain || isContainText) {
+            return i;
+        }
+    }
+}
+
 function getNodo(point) {
     for (var i = 0; i < nodes.length; i++) {
         if (nodes[i].circle.contains(point)) {
@@ -274,12 +324,20 @@ function drawArrow(begin, end) {
     text.fontSize = 25;
     text.content = attr;
 
+    path.onMouseDown = function(event) {
+        if (currentTool === "delete") {
+            deleteArrow(event);
+        }
+    };
+
     text.onMouseDown = function(event) {
         if (currentTool === "rename") {
             var newText = prompt("Ingrese el nuevo atributo");
             text.content = newText;
             var pos = getFlecha(event.point);
             arrows[pos].attr = newText;
+        } else if (currentTool === "delete") {
+            deleteArrow(event);
         }
     };
 
