@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <script src="js/jquery-3.4.1.js"></script>
+    <!-- Load the Paper.js library -->
+    <script type="text/javascript" src="js/paper-full.js"></script>
+    <!-- Load external PaperScript and associate it with myCanvas -->
+    <script
+      type="text/paperscript"
+      src="js/newScript.js"
+      canvas="myCanvas"
+    ></script>
+  </head>
+  <body>
+    <div id = "tit">
+      <ul class="lista">
+        <li id="item"><a href="#" id="add">Añadir</a></li>
+        <li id="item"><a href="#" id="delete">Eliminar</a></li>
+        <li id="item"><a href="#" id="move">Mover</a></li>
+        <li id="item"><a href="#" id="rename">Rename</a></li>
+        <li id="item"><a href="#" id="matrix">Matriz</a></li>
+      </ul>
+    </div>
+    <canvas id="myCanvas" resize></canvas>
+  </body>
+</html>
