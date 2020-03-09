@@ -17,7 +17,7 @@ function flecha(attr, text, path, init, end) {
 
 //variables
 
-var nodos = [];
+var nodes = [];
 currentTool = "add";
 
 //menu
@@ -37,25 +37,52 @@ $("#matrix").click(function() {
 
 //Main Function
 function onMouseUp(event) {
-    console.log(collides(myCircle));
   var myCircle = createCircle(event);
   if (collides(myCircle) === false) {
+    if (currentTool === "add") {
+      crearNodo(event,myCircle);
+    }
+    else if(currentTool === "delete"){
+
+    }
+  }
+  else{
+      if(currentTool === "delete"){
+          deleteNode(event);
+      }
+  }
+}
+
+//deleteNodo
+function deleteNode(event){
+    var del = isContained(event.point);
+    var pos = nodes.indexOf(del)
+    del.circle.remove();
+    del.text.remove();
+    nodes.splice(pos,1);
+}
+
+//addNodo
+function crearNodo(event, myCircle){
     myCircle.fillColor = "red";
     //obtención nombre
     var texto = prompt("Ingrese el nombre del nodo: ");
     //get text file
-    var textIt = textItem(event,texto);
-  }
+    var textIt = textItem(event, texto);
+    //create Object
+    nodeObj = new nodo(texto, textIt, myCircle);
+    nodes.push(nodeObj);
 }
 
 //additional functions
 
-function textItem(event,texto){
-    var text = new PointText(new Point(event.point.x, event.point.y - 45));
-      text.justification = "center";
-      text.fillColor = "white";
-      text.fontSize = 25;
-      text.content = texto;
+function textItem(event, texto) {
+  var text = new PointText(new Point(event.point.x, event.point.y - 45));
+  text.justification = "center";
+  text.fillColor = "white";
+  text.fontSize = 25;
+  text.content = texto;
+  return text;
 }
 
 function createCircle(event) {
@@ -67,14 +94,25 @@ function createCircle(event) {
 }
 
 function collides(nodo) {
-  for (var i = 0; i < nodos.length; i++) {
-    var collision = nodo.getIntersections(nodos[i].circle);
+  for (var i = 0; i < nodes.length; i++) {
+    var myCircle = nodes[i].circle;
+    var collision = nodo.getIntersections(myCircle);
     if (collision.length !== 0) {
       return true;
     }
   }
   return false;
 }
+
+function isContained(point) {
+    for (var i = 0; i < nodes.length; i++) {
+      var myCircle = nodes[i].circle;
+      var isContain = myCircle.contains(point);
+      if (isContain) {
+        return nodes[i];
+      }
+    }
+  }
 
 function getNodo(nodo) {
   for (var i = 0; i < nodos.length; i++) {
