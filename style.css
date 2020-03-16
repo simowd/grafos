@@ -13,6 +13,8 @@ canvas{
     display: inline;
     padding-left: 15px;
     padding-right: 15px;
+    padding-top: 50px;
+    padding-bottom: 50px;
     margin: 0 auto;
 }
 a{
@@ -26,8 +28,8 @@ a{
 }
 #lista{
     margin: 0 auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 .tit{
     float: left;
@@ -40,7 +42,7 @@ ul{
     background-color: lightgreen;
 }
 td{
-    font-size: 55px;
+    font-size: 65px;
 }
 table {
     border-collapse: collapse;
