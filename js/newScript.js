@@ -55,6 +55,11 @@ $("#move").click(function() {
     $("#add").removeClass();
     $("#rename").removeClass();
 });
+$("#johnson").click(function() {
+    var ruta = johnsonAlgorithm(arrows,nodes);
+    console.log(ruta);
+    changeColor(ruta);
+});
 $("#matrix").click(function() {
     var longitud = nodes.length;
     var matrix = [];
@@ -78,7 +83,7 @@ $("#matrix").click(function() {
     for (var i = 0; i < arrows.length; i++) {
         var ini = arrows[i].init;
         var fin = arrows[i].end;
-        console.log(arrows[i].end == matrix[0][2]);
+        //console.log(arrows[i].end == matrix[0][2]);
         var lon = nodes.length;
         for (var j = 1; j < lon + 1; j++) {
             if (matrix[0][j] == fin) {
@@ -107,7 +112,7 @@ function onMouseUp(event) {
         }
     }
     console.log(nodes);
-    console.log(arrows);
+    //console.log(arrows);
 }
 
 //deleteNodo
@@ -370,4 +375,19 @@ function tabelajzing(a) {
             .join("</td></tr>\n<tr>\n<td>"),
         "</td>\n</tr>\n"
     ].join("");
+}
+
+//change color for Johnson Algorithm
+
+function changeColor(route){
+    for(var i = 0; i < nodes.length;i++){
+        for(var j = 0; j < route.length;j++){
+            if(route[j].nom == nodes[i].nom){
+                tot = eval(route[j].izq) - eval(route[j].der);
+                if(tot == 0){
+                    nodes[i].circle.fillColor = "blue;"
+                }
+            }
+        }
+    }
 }
