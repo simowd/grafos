@@ -27,35 +27,40 @@ var pos = 1;
 
 //menu
 
-$("#add").click(function() {
+$("#add").click(function () {
     currentTool = "add";
     $("#add").addClass("selected");
     $("#delete").removeClass();
     $("#rename").removeClass();
     $("#move").removeClass();
 });
-$("#delete").click(function() {
+$("#delete").click(function () {
     currentTool = "delete";
     $("#delete").addClass("selected");
     $("#add").removeClass();
     $("#rename").removeClass();
     $("#move").removeClass();
 });
-$("#rename").click(function() {
+$("#rename").click(function () {
     currentTool = "rename";
     $("#rename").addClass("selected");
     $("#delete").removeClass();
     $("#add").removeClass();
     $("#move").removeClass();
 });
-$("#move").click(function() {
+$("#move").click(function () {
     currentTool = "move";
     $("#move").addClass("selected");
     $("#delete").removeClass();
     $("#add").removeClass();
     $("#rename").removeClass();
 });
-$("#matrix").click(function() {
+$("#johnson").click(function () {
+    var ruta = johnsonAlgorithm(arrows, nodes);
+    console.log(ruta);
+    changeColor(ruta);
+});
+$("#matrix").click(function () {
     var longitud = nodes.length;
     var matrix = [];
     var filcol = [""];
@@ -78,7 +83,7 @@ $("#matrix").click(function() {
     for (var i = 0; i < arrows.length; i++) {
         var ini = arrows[i].init;
         var fin = arrows[i].end;
-        console.log(arrows[i].end == matrix[0][2]);
+        //console.log(arrows[i].end == matrix[0][2]);
         var lon = nodes.length;
         for (var j = 1; j < lon + 1; j++) {
             if (matrix[0][j] == fin) {
@@ -107,7 +112,7 @@ function onMouseUp(event) {
         }
     }
     console.log(nodes);
-    console.log(arrows);
+    //console.log(arrows);
 }
 
 //deleteNodo
@@ -157,14 +162,14 @@ function crearNodo(event, myCircle) {
     var textIt = textItem(event, texto);
 
     //move parameter
-    myCircle.onMouseDrag = function(event) {
+    myCircle.onMouseDrag = function (event) {
         if (currentTool === "move") {
             myCircle.position = event.point;
             textIt.position = new Point(event.point.x, event.point.y - 45);
         }
     };
     //rename node
-    myCircle.onMouseDown = function(event) {
+    myCircle.onMouseDown = function (event) {
         if (currentTool === "rename") {
             var newText = prompt("Ingrese el nuevo nombre");
             textIt.content = newText;
@@ -175,7 +180,7 @@ function crearNodo(event, myCircle) {
         }
     };
 
-    myCircle.onDoubleClick = function(event) {
+    myCircle.onDoubleClick = function (event) {
         if (currentTool === "add") {
             if (mod1 < 0 && mod2 < 0) {
                 mod1 = getNodo(event.point);
@@ -234,7 +239,7 @@ function textItem(event, texto) {
 function createCircle(event) {
     var myCircle = new Path.Circle({
         center: event.point,
-        radius: 70
+        radius: 70,
     });
     return myCircle;
 }
@@ -310,10 +315,10 @@ function drawArrow(begin, end) {
         segments: [
             path.getPointAt(path.length) + arrowVector.rotate(145),
             path.getPointAt(path.length),
-            path.getPointAt(path.length) + arrowVector.rotate(-145)
+            path.getPointAt(path.length) + arrowVector.rotate(-145),
         ],
         fillColor: colorcito,
-        strokeWidth: 6
+        strokeWidth: 6,
     });
 
     //generar atributo
@@ -324,13 +329,13 @@ function drawArrow(begin, end) {
     text.fontSize = 25;
     text.content = attr;
 
-    path.onMouseDown = function(event) {
+    path.onMouseDown = function (event) {
         if (currentTool === "delete") {
             deleteArrow(event);
         }
     };
 
-    text.onMouseDown = function(event) {
+    text.onMouseDown = function (event) {
         if (currentTool === "rename") {
             var newText = prompt("Ingrese el nuevo atributo");
             text.content = newText;
@@ -364,10 +369,53 @@ function tabelajzing(a) {
     return [
         "<tr>\n<td>",
         a
-            .map(function(e, i) {
+            .map(function (e, i) {
                 return e.join("</td>\n<td>");
             })
             .join("</td></tr>\n<tr>\n<td>"),
-        "</td>\n</tr>\n"
+        "</td>\n</tr>\n",
     ].join("");
+}
+
+//change color for Johnson Algorithm
+
+function changeColor(route) {
+    //radio = 70
+    for (var i = 0; i < nodes.length; i++) {
+        for (var j = 0; j < route.length; j++) {
+            if (route[j].nom == nodes[i].nom) {
+                tot = eval(route[j].izq) - eval(route[j].der);
+                if (tot == 0) {
+                    nodes[i].circle.fillColor = "blue;";
+                }
+                pos = nodes[i].circle.position;
+                var path = new Path.Line(
+                    new Point(pos.x - 70, pos.y),
+                    new Point(pos.x + 70, pos.y)
+                );
+                var path2 = new Path.Line(
+                    new Point(pos.x, pos.y),
+                    new Point(pos.x, pos.y + 70)
+                );
+                path.strokeColor = "white";
+                path2.strokeColor = "white";
+
+                var text = new PointText(
+                    new Point(pos.x-35, pos.y + 35)
+                );
+                text.justification = "center";
+                text.fillColor = "white";
+                text.fontSize = 18;
+                text.content = route[j].izq;
+
+                var text1 = new PointText(
+                    new Point(pos.x+35, pos.y + 35)
+                );
+                text1.justification = "center";
+                text1.fillColor = "white";
+                text1.fontSize = 18;
+                text1.content = route[j].der;
+            }
+        }
+    }
 }
