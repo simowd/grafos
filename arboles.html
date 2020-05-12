@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Sen&display=swap"
+      rel="stylesheet"
+    />
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="BinarySearchTree.js"></script>
+	
+	<script>
+		// SVG setup variables
+		var height = 700;
+		var width = 1500;
+		var duration = 1500;
+		var margin = {
+				"top":50,
+				"bottom":20,
+				"left":10,
+				"right":10
+		}
+		
+		// how big we want the nodes to be
+		var nodeRadius = 20;
+		// ditto, except using d3.svg.symbol
+		var nodeSize = 1000;
+	</script>
+    <script src="js/jquery-3.4.1.js"></script>
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"
+    />
+
+    <!-- Load the Paper.js library -->
+
+    <script src="js/binaryTree.js"></script>
+    <!-- Load external PaperScript and associate it with myCanvas -->
+    <script src="js/johnson.js"></script>
+    <script
+      type="text/paperscript"
+      src="js/newScript.js"
+      canvas="myCanvas"
+    ></script>
+    <style type="text/css">
+    text.node-null {
+			font-size:7pt;
+		}
+		
+		text.node-key {
+			font-weight:bold;
+		}
+      input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        outline: none;
+        border: 1px solid black;
+      }
+
+      input.valid {
+        border: 1px solid green;
+      }
+
+      input.invalid {
+        border: 1px solid red;
+      }
+
+      input.invalid + .error-message {
+        display: initial;
+      }
+
+      .error-message {
+        display: none;
+      }
+      body {
+        margin: 0;
+      }
+      #container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      a {
+        text-decoration: none;
+        color: blue;
+        font-size: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="pre" class="modal">
+        <p style="font-size: 30px;">Preorden:</p>
+      </div>
+      <div id="in" class="modal">
+        <p style="font-size: 30px;">Inorden:</p>
+      </div>
+      <div id="post" class="modal">
+        <p style="font-size: 30px;">Postorden:</p>
+      </div>
+    <div id="tit">
+      <ul class="lista">
+        <li id="item">
+          <a href="#pre" id="preorden" rel="modal:open">Preorden</a>
+        </li>
+        <li id="item"><a href="#in" id="inorden" rel="modal:open">Inorden</a></li>
+        <!-- <li id="item"><a href="#" id="move">Mover</a></li>  -->
+
+        <li id="item"><a href="#post" id="postorden" rel="modal:open">Postorden</a></li>
+
+      </ul>
+      <input type="text" id="some-number" />
+    <div id="container"></div>
+    </div>
+    
+
+
+    <script src="js/sigma.min.js"></script>
+    <script src="js/generateTree.js"></script>
+  </body>
+</html>
